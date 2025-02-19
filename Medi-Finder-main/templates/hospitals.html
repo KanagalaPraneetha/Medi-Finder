@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nearby Hospitals</title>
+  </head>
+  <body>
+    <h1>Nearby Hospitals</h1>
+    {% if hospitals %}
+    <ul class="list-vertical">
+      {% for hospital in hospitals %}
+      {% if not hospital_place_id or hospital_place_id == hospital['place_id'] %}
+        <form action="/call_hospital" method="post">
+          <input type="hidden" name="latitude" value="{{ latitude }}">
+          <input type="hidden" name="longitude" value="{{ longitude }}">
+          <input type="hidden" name="hospital_place_id" value="{{ hospital['place_id'] }}">
+          <input type="hidden" name="hospital_name" value="{{ hospital['name'] }}">
+          <strong>{{ hospital['name'] }}</strong><br>
+          Address: {{ hospital['address'] }}<br>
+          {% if hospital_place_id == hospital['place_id'] %}
+          <button type="submit">Call again</button><br>
+          {% else %}
+          <button type="submit">Call</button><br>
+          {% endif %}
+          
+        </form>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No hospitals found within 10km radius.</p>
+    {% endif %}
+  </body>
+</html>
